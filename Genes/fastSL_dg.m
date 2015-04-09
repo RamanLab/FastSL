@@ -113,12 +113,7 @@ close(h)
 %% Second phase of simulations which evalute other triplets with combinations of reactions from Jnz too
 h = waitbar(0,'0.00','Name','Identifying Jdl - Part 2 of 2...');
 
-if (~isempty(Jdl))
 ph2=find(ismember(UniqRuleIdx,UniqRuleIdx([Jsl;Jdl(:,2)]))); 
-else
-ph2=find(ismember(UniqRuleIdx,UniqRuleIdx([Jsl]))); 
-end
-
 Jnz_ph2=Jnz(~ismember(Jnz,ph2)); %Jnz
 %length(Jnz_ph2)
 

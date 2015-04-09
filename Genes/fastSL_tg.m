@@ -158,12 +158,7 @@ while(length(Jnz_copy))~=0
     waitbar(((length(Jnz)-length(Jnz_copy))/length(Jnz)),h,[num2str(round((length(Jnz)-length(Jnz_copy))*100/length(Jnz))) '% completed...']);
 end
 close(h);
-if (~isempty(Jdl))
-ph2=find(ismember(UniqRuleIdx,UniqRuleIdx([Jsl;Jdl(:,2)]))); 
-else
-ph2=find(ismember(UniqRuleIdx,UniqRuleIdx([Jsl]))); 
-end
-
+ph2=find(ismember(UniqRuleIdx,UniqRuleIdx([Jsl;Jdl(:,2)])));
 Jnz_ph2=Jnz(~ismember(Jnz,ph2)); %Jnz to analyze the rest of the triplets- phase 2
 %%
 h = waitbar(0,'0.00','Name','Identifying Jdl& Jtl - Part 2 of 2...');
