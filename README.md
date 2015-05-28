@@ -20,19 +20,19 @@ Description of Available files:
 
 Models/
 
-'Eco_iAF1260.mat' :: SBML model of Escherichia coli - iAF1260 used for analysis 
+'Eco_iAF1260.mat' :: SBML model of *Escherichia coli* - *i*AF1260 used for analysis 
 
 'eliList_eco_iAF1260.mat' :: List of reactions elimated for lethality analysis- Exchange, ATPM etc
 
 
 
-'Mtu_iNJ661.mat' :: SBML model of Mycobacterium Tuberculosis used for analysis 
+'Mtu_iNJ661.mat' :: SBML model of *Mycobacterium Tuberculosis* used for analysis 
 
 'eliList_mtu_iNJ661.mat' :: List of reactions elimated for lethality analysis
 
 
 
-'STM_v1.0.mat' :: SBML model of Salmonella Typhimurium used for analysis 
+'STM_v1.0.mat' :: SBML model of *Salmonella* Typhimurium used for analysis 
 
 'eliList_sty_STM_v1.0.mat' :: List of reactions elimated for lethality analysis
 
