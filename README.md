@@ -6,7 +6,7 @@ To perform synthetic lethality analysis using Fast-SL the following tools are ne
 
 1. COBRA Toolbox
 
-2. CPLEX v12.0 or higher (GLPK works fine too).
+2. CPLEX v12.0 or higher for the parallel version of Fast-SL . For serial version of Fast-SL, any COBRA supported solver can be used.
 
 Fast-SL description is available at : http://arxiv.org/abs/1406.6557
 
