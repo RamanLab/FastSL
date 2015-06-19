@@ -6,7 +6,7 @@ To perform synthetic lethality analysis using Fast-SL the following tools are ne
 
 1. COBRA Toolbox
 
-2. Gurobi Solver v5.6.2 or higher (GLPK works fine too).
+2. CPLEX v12.0 or higher (GLPK works fine too).
 
 Fast-SL description is available at : http://arxiv.org/abs/1406.6557
 
