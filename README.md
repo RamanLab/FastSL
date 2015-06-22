@@ -3,8 +3,11 @@ Fast-SL is an efficient algorithm to identify synthetic lethal gene/reaction set
 
 ## Requirements
 To perform synthetic lethality analysis using Fast-SL the following tools are needed:
+
 1. [COBRA Toolbox](http://opencobra.github.io/cobratoolbox/)
+
 2. An LP solver such as Gurobi, GLPK etc.
+
 3. CPLEX v12.0 or higher for the parallel version of Fast-SL. For serial version of Fast-SL, any COBRA supported solver can be used.
 
 ## Cite
