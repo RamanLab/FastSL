@@ -44,53 +44,48 @@ Reaction and Gene lethals for the models used
 
 __________________________________________________________________________
 
-    >>help fastSL
-    
-    fastSL(model,cutoff,order,eliList,atpm) 
-    
-      
-    
-      INPUT
-    
-      model (the following fields are required - others can be supplied)       
-    
-        S            Stoichiometric matrix
-    
-        b            Right hand side = dx/dt
-    
-        c            Objective coefficients
-    
-        lb           Lower bounds
-    
-        ub           Upper bounds
-    
-        rxns         Reaction Names
-    
-      OPTIONAL
-    
-      cutoff         cutoff percentage value for lethality.Default is 0.01.
-    
-      order          Order of SLs required.Default order is 2. Max value 3.
-    
-      eliList        List of reactions to be ignored for lethality
-    
-      analysis:Exchange Reactions, ATPM etc.
-    
-      atpm           ATPM Reaction Id in model.rxns if other than 'ATPM'
-    
-      OUTPUT
-    
-      A 'modelname_Rxn_Lethals.mat' file containing all the lethal reaction sets of the order specified
-    
-    
-    
-    >>example_fastSL
-    
-    >>example_fastSLgenes
+```MATLAB
+>>help fastSL
+
+fastSL(model,cutoff,order,eliList,atpm) 
+
+  
+
+  INPUT
+
+  model (the following fields are required - others can be supplied)       
+
+    S            Stoichiometric matrix
+
+    b            Right hand side = dx/dt
+
+    c            Objective coefficients
+
+    lb           Lower bounds
+
+    ub           Upper bounds
+
+    rxns         Reaction Names
+
+  OPTIONAL
+
+  cutoff         cutoff percentage value for lethality.Default is 0.01.
+
+  order          Order of SLs required.Default order is 2. Max value 3.
+
+  eliList        List of reactions to be ignored for lethality
+
+  analysis:Exchange Reactions, ATPM etc.
+
+  atpm           ATPM Reaction Id in model.rxns if other than 'ATPM'
+
+  OUTPUT
+
+  A 'modelname_Rxn_Lethals.mat' file containing all the lethal reaction sets of the order specified
 
 
 
+>>example_fastSL
 
-
-
-
+>>example_fastSLgenes
+```
