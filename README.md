@@ -9,6 +9,7 @@ To perform synthetic lethality analysis using Fast-SL the following tools are ne
 
 ## Cite
 Aditya Pratapa, Shankar Balachandran and Karthik Raman (2015) "Fast-SL: An efficient algorithm to identify synthetic lethal sets in metabolic networks" _Bioinformatics_ doi:10.1093/bioinformatics/btv352
+
 Full article: [Bioinformatics](http://bioinformatics.oxfordjournals.org/content/early/2015/06/16/bioinformatics.btv352.short)
 
 __________________________________________________________________________
