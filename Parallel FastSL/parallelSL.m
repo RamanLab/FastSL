@@ -1,4 +1,4 @@
-function [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,eliList,atpm)
+function [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,order,eliList,atpm)
 %%  [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,eliList,atpm)
 % INPUT
 % model (the following fields are required - others can be supplied)
@@ -31,17 +31,20 @@ else
     cutoff = 0.01;
 end
 
-% if exist('order', 'var')
-%     if isempty(order)
-%         order = 4;
-%     end
+if exist('order', 'var')
+    if isempty(order)
+        order = 4;
+    end
+end
 % else
 %     order = 4;
 % end
 
 if exist('eliList', 'var')
     if isempty(eliList)
-        eliList = model.rxns(ismember(model.rxns,'ATPM')); %To eliminate ATPM.
+        eliList = model.rxns(ismember(model.rxns,atpm)); %To eliminate ATPM.
+    else
+    	eliList = [eliList' atpm']';
     end
 else
     eliList = model.rxns(ismember(model.rxns,'ATPM'));
@@ -150,150 +153,151 @@ Jdl=Jdl_p(find(lt(solKO_ij,0.01*grWT)),:);
 Jtl_ps12=[solKO_ij(~lt(solKO_ij,0.01*grWT)), Jdl_p(find(~lt(solKO_ij,0.01*grWT)),:)];
 
 Jdl=unique(sort(Jdl,2),'rows');
-
-%%
-%Triple Lethal Reactions
-Jtl_p=[];
-tic
-parfor iRxn=1:length(Jtl_ps12)
-   [solKO_ij_f(iRxn), solKO_ij_x(iRxn,:)]=optMod(M2,Jtl_ps12(iRxn,2:end),model,Jtl_ps12(iRxn,1));
-end
-
-
-for i=1:length(Jtl_ps12)
-    delIdx_ij=Jtl_ps12(i,2:end); 
-
-    newnnz=find(~eq(solKO_ij_x(i,:),0))';
-    Jnz_ij=newnnz(~ismember(newnnz,[Jsl;eliIdx]));
-    
-    Jtl_p=[Jtl_p; delIdx_ij([ones(length(Jnz_ij),1) 2*(ones(length(Jnz_ij),1))]) Jnz_ij];
-    
-end
-Jtl_p=unique(sort(Jtl_p,2),'rows');
-temporary=[];
-tttt=Jtl_p;
-uJdl=unique(Jdl);
-dummy=0;
-mm=0;
-parfor iRxn=1:length(Jtl_p)
-    mm=mm+1;
-dummy1=ismember(Jtl_p(iRxn,:),uJdl);
-dum=Jtl_p(iRxn,:);
-if sum(dummy1)>=2
-    if max(sum(ismember(Jdl,nchoosek(dum(dummy1),2))'))<2
-        temporary=[temporary;Jtl_p(iRxn,:)];
-        dummy=dummy+1;
-    end
-    
-else
-    temporary=[temporary;Jtl_p(iRxn,:)];
-end
-end
-Jtl_p=temporary;
-
-
-solKO_ijk=zeros(length(Jtl_p),1);
-parfor i=1:length(Jtl_p);
-    [solKO_ijk(i)]= optMod(modeldel,Jtl_p(i,:),model);
-end
-
-Jtl_size=sum(lt(solKO_ijk,0.01*grWT));
-Jtl_time=toc;
-fprintf('\n Identified %d Synthetic Lethal Triplets in %d seconds...\n',Jtl_size,Jtl_time);
-
-%%
-%Quadruple Lethals
-Jtl=Jtl_p(find(lt(solKO_ijk,0.01*grWT)),:);
-
-Jql_ps123=[solKO_ijk(~lt(solKO_ijk,0.01*grWT)), Jtl_p(find(~lt(solKO_ijk,0.01*grWT)),:)];
-
-
-
-tic
-solKO_ijk_x=sparse(zeros(length(Jql_ps123),nRxns));
-solKO_ijk_f=sparse(zeros(length(Jql_ps123),1));
-tic
-parfor iRxn=1:length(Jql_ps123)
-   [solKO_ijk_f(iRxn) solKO_ijk_x(iRxn,:)]=optMod(M2,Jql_ps123(iRxn,2:end),model,Jql_ps123(iRxn,1));
-end
-
-Jql_p=[];
-Jql_p=zeros(100000000,4); %Some large value
-k=0;
-for i=1:length(Jql_ps123)
-    delIdx_ijk=Jql_ps123(i,2:end); 
-
-    newnnz=find(~eq(solKO_ijk_x(i,:),0))';
-    Jnz_ijk=newnnz(~ismember(newnnz,[Jsl;eliIdx]));
- 
-        
-    Jql_p(k+1:k+length(Jnz_ijk),:)=[delIdx_ijk([ones(length(Jnz_ijk),1) 2*(ones(length(Jnz_ijk),1)) 3*(ones(length(Jnz_ijk),1))]) Jnz_ijk];
-    k=k+length(Jnz_ijk)+1;
-    if k>length(Jql_p)
-        warning('Code will run slower. To improve performance re-initialize the matrix Jql_p with larger matrix size in line 221.');
-    end
-end
-Jql_p(k:end,:)=[];
-Jql_p=unique(sort(Jql_p,2),'rows');
-if sum(Jql_p(1,:))==0
-    Jql_p(1,:)=[];
-end
-
-solKO_ijkl=zeros(length(Jql_p),1);
-parfor i=1:length(Jql_p);
-    [solKO_ijkl(i)]= optMod(modeldel,Jql_p(i,:),model);
-end
-
-Jql_size=sum(lt(solKO_ijkl,0.01*grWT));
-
-
-
-Jql=Jql_p(find(lt(solKO_ijkl,0.01*grWT)),:);
-
-temporary=[];
-tttt=Jql;
-uJdl=unique(Jdl);
-dummy=0;
-
-mm=0;
-parfor iRxn=1:length(Jql)
-dummy1=ismember(Jql(iRxn,:),uJdl);
-dum=Jql(iRxn,:);
-if sum(dummy1)>=2
-    if max(sum(ismember(Jdl,nchoosek(dum(dummy1),2))'))<2
-        temporary=[temporary;Jql(iRxn,:)];
-        dummy=dummy+1;
-    end
-else
-    temporary=[temporary;Jql(iRxn,:)];
-end
-end
-
-
-
-Jql=temporary;
-
-uJtl=unique(Jtl);
-dummy=0;
-
-temporary=[];
-mm=0;
-parfor iRxn=1:length(Jql)
-dummy1=ismember(Jql(iRxn,:),uJtl);
-dum=Jql(iRxn,:);
-if sum(dummy1)>=3
-    if max(sum(ismember(Jtl,nchoosek(dum(dummy1),3))'))<3
-        temporary=[temporary;Jql(iRxn,:)];
-        dummy=dummy+1;
-    end
-else
-    temporary=[temporary;Jql(iRxn,:)];
-end
-end
-
-
-Jql=temporary;
-
-Jql_time=toc;
-
-fprintf('\n Identified %d Synthetic Lethal Quadruplets in %d seconds...\n',length(Jql),Jql_time);
+Jtl = [];
+Jql = [];
+% %%
+% %Triple Lethal Reactions
+% Jtl_p=[];
+% tic
+% parfor iRxn=1:length(Jtl_ps12)
+%    [solKO_ij_f(iRxn), solKO_ij_x(iRxn,:)]=optMod(M2,Jtl_ps12(iRxn,2:end),model,Jtl_ps12(iRxn,1));
+% end
+% 
+% 
+% for i=1:length(Jtl_ps12)
+%     delIdx_ij=Jtl_ps12(i,2:end); 
+% 
+%     newnnz=find(~eq(solKO_ij_x(i,:),0))';
+%     Jnz_ij=newnnz(~ismember(newnnz,[Jsl;eliIdx]));
+%     
+%     Jtl_p=[Jtl_p; delIdx_ij([ones(length(Jnz_ij),1) 2*(ones(length(Jnz_ij),1))]) Jnz_ij];
+%     
+% end
+% Jtl_p=unique(sort(Jtl_p,2),'rows');
+% temporary=[];
+% tttt=Jtl_p;
+% uJdl=unique(Jdl);
+% dummy=0;
+% mm=0;
+% parfor iRxn=1:length(Jtl_p)
+%     mm=mm+1;
+% dummy1=ismember(Jtl_p(iRxn,:),uJdl);
+% dum=Jtl_p(iRxn,:);
+% if sum(dummy1)>=2
+%     if max(sum(ismember(Jdl,nchoosek(dum(dummy1),2))'))<2
+%         temporary=[temporary;Jtl_p(iRxn,:)];
+%         dummy=dummy+1;
+%     end
+%     
+% else
+%     temporary=[temporary;Jtl_p(iRxn,:)];
+% end
+% end
+% Jtl_p=temporary;
+% 
+% 
+% solKO_ijk=zeros(length(Jtl_p),1);
+% parfor i=1:length(Jtl_p);
+%     [solKO_ijk(i)]= optMod(modeldel,Jtl_p(i,:),model);
+% end
+% 
+% Jtl_size=sum(lt(solKO_ijk,0.01*grWT));
+% Jtl_time=toc;
+% fprintf('\n Identified %d Synthetic Lethal Triplets in %d seconds...\n',Jtl_size,Jtl_time);
+% 
+% %%
+% %Quadruple Lethals
+% Jtl=Jtl_p(find(lt(solKO_ijk,0.01*grWT)),:);
+% 
+% Jql_ps123=[solKO_ijk(~lt(solKO_ijk,0.01*grWT)), Jtl_p(find(~lt(solKO_ijk,0.01*grWT)),:)];
+% 
+% 
+% 
+% tic
+% solKO_ijk_x=sparse(zeros(length(Jql_ps123),nRxns));
+% solKO_ijk_f=sparse(zeros(length(Jql_ps123),1));
+% tic
+% parfor iRxn=1:length(Jql_ps123)
+%    [solKO_ijk_f(iRxn) solKO_ijk_x(iRxn,:)]=optMod(M2,Jql_ps123(iRxn,2:end),model,Jql_ps123(iRxn,1));
+% end
+% 
+% Jql_p=[];
+% Jql_p=zeros(100000000,4); %Some large value
+% k=0;
+% for i=1:length(Jql_ps123)
+%     delIdx_ijk=Jql_ps123(i,2:end); 
+% 
+%     newnnz=find(~eq(solKO_ijk_x(i,:),0))';
+%     Jnz_ijk=newnnz(~ismember(newnnz,[Jsl;eliIdx]));
+%  
+%         
+%     Jql_p(k+1:k+length(Jnz_ijk),:)=[delIdx_ijk([ones(length(Jnz_ijk),1) 2*(ones(length(Jnz_ijk),1)) 3*(ones(length(Jnz_ijk),1))]) Jnz_ijk];
+%     k=k+length(Jnz_ijk)+1;
+%     if k>length(Jql_p)
+%         warning('Code will run slower. To improve performance re-initialize the matrix Jql_p with larger matrix size in line 221.');
+%     end
+% end
+% Jql_p(k:end,:)=[];
+% Jql_p=unique(sort(Jql_p,2),'rows');
+% if sum(Jql_p(1,:))==0
+%     Jql_p(1,:)=[];
+% end
+% 
+% solKO_ijkl=zeros(length(Jql_p),1);
+% parfor i=1:length(Jql_p);
+%     [solKO_ijkl(i)]= optMod(modeldel,Jql_p(i,:),model);
+% end
+% 
+% Jql_size=sum(lt(solKO_ijkl,0.01*grWT));
+% 
+% 
+% 
+% Jql=Jql_p(find(lt(solKO_ijkl,0.01*grWT)),:);
+% 
+% temporary=[];
+% tttt=Jql;
+% uJdl=unique(Jdl);
+% dummy=0;
+% 
+% mm=0;
+% parfor iRxn=1:length(Jql)
+% dummy1=ismember(Jql(iRxn,:),uJdl);
+% dum=Jql(iRxn,:);
+% if sum(dummy1)>=2
+%     if max(sum(ismember(Jdl,nchoosek(dum(dummy1),2))'))<2
+%         temporary=[temporary;Jql(iRxn,:)];
+%         dummy=dummy+1;
+%     end
+% else
+%     temporary=[temporary;Jql(iRxn,:)];
+% end
+% end
+% 
+% 
+% 
+% Jql=temporary;
+% 
+% uJtl=unique(Jtl);
+% dummy=0;
+% 
+% temporary=[];
+% mm=0;
+% parfor iRxn=1:length(Jql)
+% dummy1=ismember(Jql(iRxn,:),uJtl);
+% dum=Jql(iRxn,:);
+% if sum(dummy1)>=3
+%     if max(sum(ismember(Jtl,nchoosek(dum(dummy1),3))'))<3
+%         temporary=[temporary;Jql(iRxn,:)];
+%         dummy=dummy+1;
+%     end
+% else
+%     temporary=[temporary;Jql(iRxn,:)];
+% end
+% end
+% 
+% 
+% Jql=temporary;
+% 
+% Jql_time=toc;
+% 
+% fprintf('\n Identified %d Synthetic Lethal Quadruplets in %d seconds...\n',length(Jql),Jql_time);
