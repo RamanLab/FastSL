@@ -202,7 +202,7 @@ for iRxn=1:length(Jnz_copy)
     end
     modeldel.lb(delIdx_i)=model.lb(delIdx_i);
     modeldel.ub(delIdx_i)=model.ub(delIdx_i);
-    waitbar(iRxn/length(Jnz_copy),h,[num2str(round(iRxn*100/length(Jnz_copy))) '% completed...']);
+    waitbar(iRxn*(iRxn-1)*(iRxn-2)/(length(Jnz_copy)*(length(Jnz_copy)-1)*(length(Jnz_copy)-2)),h,[num2str(round(iRxn*(iRxn-1)*(iRxn-2)*100/(length(Jnz_copy)*(length(Jnz_copy)-1)*(length(Jnz_copy)-2)))) '% completed...']);
 
 end
 close(h);
