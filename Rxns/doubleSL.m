@@ -104,7 +104,7 @@ for iRxn=1:length(Jnz_copy)
             break;
         end
     end
-    waitbar(iRxn/length(Jnz_copy),h,[num2str(round(iRxn*100/length(Jnz_copy))) '% completed...']);
+    waitbar(iRxn*(iRxn-1)/(length(Jnz_copy)*(length(Jnz_copy)-1)),h,[num2str(round(iRxn*(iRxn-1)*100/(length(Jnz_copy)*(length(Jnz_copy)-1)))) '% completed...']);
 
 end
 close(h);
