@@ -58,6 +58,8 @@ end
 if exist('eliList', 'var')
     if isempty(eliList)
         eliList = model.rxns(ismember(model.rxns,atpm)); %To eliminate ATPM.
+    else
+        eliList = [eliList' atpm']';
     end
 else
     eliList = model.rxns(ismember(model.rxns,atpm));

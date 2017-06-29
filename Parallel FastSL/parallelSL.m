@@ -1,4 +1,4 @@
-function [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,eliList,atpm)
+function [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,order,eliList,atpm)
 %%  [Jsl,Jdl,Jtl,Jql] = parallelSL(model,cutoff,eliList,atpm)
 % INPUT
 % model (the following fields are required - others can be supplied)
@@ -31,17 +31,20 @@ else
     cutoff = 0.01;
 end
 
-% if exist('order', 'var')
-%     if isempty(order)
-%         order = 4;
-%     end
+if exist('order', 'var')
+    if isempty(order)
+        order = 4;
+    end
+end
 % else
 %     order = 4;
 % end
 
 if exist('eliList', 'var')
     if isempty(eliList)
-        eliList = model.rxns(ismember(model.rxns,'ATPM')); %To eliminate ATPM.
+        eliList = model.rxns(ismember(model.rxns,atpm)); %To eliminate ATPM.
+    else
+    	eliList = [eliList' atpm']';
     end
 else
     eliList = model.rxns(ismember(model.rxns,'ATPM'));
@@ -150,9 +153,7 @@ Jdl=Jdl_p(find(lt(solKO_ij,0.01*grWT)),:);
 Jtl_ps12=[solKO_ij(~lt(solKO_ij,0.01*grWT)), Jdl_p(find(~lt(solKO_ij,0.01*grWT)),:)];
 
 Jdl=unique(sort(Jdl,2),'rows');
-
-%%
-%Triple Lethal Reactions
+% %Triple Lethal Reactions
 Jtl_p=[];
 tic
 parfor iRxn=1:length(Jtl_ps12)
