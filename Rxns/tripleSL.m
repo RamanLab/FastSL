@@ -85,7 +85,6 @@ for iRxn=1:length(Jnz_copy)
             delIdx_j=Jnz_i(jRxn);
             modeldel.lb(delIdx_j)=0;modeldel.ub(delIdx_j)=0;
             solKO_ij=optimizeCbModel(modeldel,'max','one');
-            solKO_ij=optimizeCbModel(modeldel,'max','one');
             if (solKO_ij.f<cutoff*grWT && ~eq(solKO_ij.stat,0)) 
                 Jdl=[Jdl;delIdx_i delIdx_j];
             else
