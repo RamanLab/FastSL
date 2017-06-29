@@ -17,9 +17,9 @@ To perform synthetic lethality analysis using Fast-SL the following tools are ne
 
 __________________________________________________________________________
 
-###Description of Available files
+### Description of Available files
 
-####`Models/`
+#### `Models/`
 'Eco_iAF1260.mat' :: SBML model of *Escherichia coli* - *i*AF1260 used for analysis 
 
 'eliList_eco_iAF1260.mat' :: List of reactions eliminated for lethality analysis- Exchange, ATPM etc
@@ -32,7 +32,7 @@ __________________________________________________________________________
 
 'eliList_sty_STM_v1.0.mat' :: List of reactions eliminated for lethality analysis
 
-####`Sample Results/`
+#### `Sample Results/`
 Reaction and Gene lethals for the models used
 
 __________________________________________________________________________
