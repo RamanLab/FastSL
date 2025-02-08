@@ -56,12 +56,12 @@ Jnz=find(~eq(solWT.x,0));
 %If a list of reactions for which are eliminated for lethality is given often exchange reactions are not considered
 if (~isempty(eliList))
     eliIdx = find(ismember(model.rxns,eliList));
-    Jnz_copy=Jnz(~ismember(Jnz,eliIdx)); %Jnz
+    Jnz=Jnz(~ismember(Jnz,eliIdx)); %Jnz
 end
 
 Jsl=singleSL(model,cutoff,eliList);
 Jsl=find(ismember(model.rxns,Jsl));
-Jnz_copy=Jnz_copy(~ismember(Jnz_copy,Jsl)); %Eliminate Single lethal reaction deletions for enumeration of higher order lethals
+Jnz_copy=Jnz(~ismember(Jnz,Jsl)); %Eliminate Single lethal reaction deletions for enumeration of higher order lethals
 
 Jdl=[];
 Jtl=[];
