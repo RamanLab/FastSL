@@ -18,7 +18,6 @@ Fast-SL is a parallelized workflow for identifying synthetic lethal (SL) relatio
 5. [Citing Fast-SL](#citing-fast-sl)
 6. [Maintainers & contact](#maintainers--contact)
 7. [Acknowledgements](#acknowledgements)
-8. [License](#license)
 
 ## Getting started
 
@@ -95,11 +94,9 @@ If you use this repository in academic work, please cite:
 
 ## Maintainers & contact
 
-Fast-SL is maintained by members of the [RBCDSAI Lab, IIT Madras](https://rbcdsai.iitm.ac.in/). For questions or contributions, please open an issue or email the corresponding authors listed in the publication.
+Fast-SL is maintained by members of the [Raman Lab, IIT Madras](https://ramanlab.github.io/). For questions or contributions, please open an issue or email the corresponding authors listed in the publication.
 
 ## Acknowledgements
-
-Fast-SL development was supported by:
 
 - High Performance Computing Environment, P G Senapathy Centre for Computing Resources, IIT Madras.
 - Grant BT/PR4949/BRB/10/1048/2012 from the [Department of Biotechnology, Government of India](https://www.dbtindia.nic.in/).
