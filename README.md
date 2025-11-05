@@ -106,9 +106,4 @@ Fast-SL development was supported by:
 - [Initiative for Biological Systems Engineering (IBSE)](https://ibse.iitm.ac.in/).
 - [Robert Bosch Centre for Data Science and Artificial Intelligence (RBCDSAI)](https://rbcdsai.iitm.ac.in/).
 
-![IBSE logo](https://github.com/RBC-DSAI-IITM/rbc-dsai-iitm.github.io/blob/master/images/IBSE_logo.png)
-![RBCDSAI logo](https://github.com/RBC-DSAI-IITM/rbc-dsai-iitm.github.io/blob/master/images/logo.jpg)
-
-## License
-
-This repository follows the license terms stated in the original distribution. Please consult the authors if you require clarification for reuse or redistribution.
+<img title="IBSE logo" src="https://github.com/RBC-DSAI-IITM/rbc-dsai-iitm.github.io/blob/master/images/IBSE_logo.png" height="200" width="200"><img title="RBC-DSAI logo" src="https://github.com/RBC-DSAI-IITM/rbc-dsai-iitm.github.io/blob/master/images/logo.jpg" height="200" width="351">
